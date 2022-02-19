@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
             {
                 _rb.velocity = Vector3.zero;
                 _rb.angularVelocity = Vector3.zero;
+                _initMousePos = Input.mousePosition;
             }
             else if (Input.GetMouseButton(0))
             {
