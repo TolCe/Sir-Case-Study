@@ -7,23 +7,30 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private Text _scoreText;
+    [SerializeField] private GameObject _startPanel;
     [SerializeField] private GameObject _successPanel;
 
     private void OnEnable()
     {
-        GameEvents.Instance.OnPlayerScoreUpdated += OnCoinUIUpdated;
-        GameEvents.Instance.OnGameSuccess += OnGameSuccess;
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnPlayerScoreUpdated += OnCoinUIUpdated;
+            GameEvents.Instance.OnGameSuccess += OnGameSuccess;
+        }
     }
-
     private void Start()
     {
         _scoreText.text = "";
+        _startPanel.SetActive(true);
         _successPanel.SetActive(false);
     }
     private void OnDisable()
     {
-        GameEvents.Instance.OnPlayerScoreUpdated -= OnCoinUIUpdated;
-        GameEvents.Instance.OnGameSuccess -= OnGameSuccess;
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnPlayerScoreUpdated -= OnCoinUIUpdated;
+            GameEvents.Instance.OnGameSuccess -= OnGameSuccess;
+        }
     }
 
     private void OnCoinUIUpdated(int totalScore)
@@ -33,13 +40,20 @@ public class UIManager : MonoBehaviour
 
     private void OnGameSuccess()
     {
-        _scoreText.text = "";
         _successPanel.SetActive(true);
+    }
+
+    public void StartGame()
+    {
+        _startPanel.SetActive(false);
+        GameEvents.Instance.GameStarted();
     }
 
     public void ResetGame()
     {
+        _scoreText.text = "";
+        _startPanel.SetActive(true);
         _successPanel.SetActive(false);
-        GameEvents.Instance.GameRestart();
+        GameEvents.Instance.GameRestarted();
     }
 }

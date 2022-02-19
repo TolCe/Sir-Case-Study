@@ -17,12 +17,30 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public event Action<Transform, GameObject> OnCoinTriggered;
-    public void CoinTriggered(Transform player, GameObject collided)
+    public event Action OnGameStarted;
+    public void GameStarted()
+    {
+        if (OnGameStarted != null)
+        {
+            OnGameStarted();
+        }
+    }
+
+    public event Action<GameObject, Vector3> OnDynamicObjectPositioned;
+    public void DynamicObjectPositioned(GameObject obj, Vector3 position)
+    {
+        if (OnDynamicObjectPositioned != null)
+        {
+            OnDynamicObjectPositioned(obj, position);
+        }
+    }
+
+    public event Action<GameObject> OnCoinTriggered;
+    public void CoinTriggered(GameObject collided)
     {
         if (OnCoinTriggered != null)
         {
-            OnCoinTriggered(player, collided);
+            OnCoinTriggered(collided);
         }
     }
 
@@ -61,12 +79,12 @@ public class GameEvents : MonoBehaviour
             OnGameSuccess();
         }
     }
-    public event Action OnGameRestart;
-    public void GameRestart()
+    public event Action OnGameRestarted;
+    public void GameRestarted()
     {
-        if (OnGameRestart != null)
+        if (OnGameRestarted != null)
         {
-            OnGameRestart();
+            OnGameRestarted();
         }
     }
 }

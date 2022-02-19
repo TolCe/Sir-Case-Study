@@ -6,16 +6,21 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private Vector3 _offset;
-    [SerializeField] private float _followSpeed;
+    [SerializeField] private float _followSpeed = 7;
 
     private void OnEnable()
     {
-        GameEvents.Instance.OnPlayerMoved += OnPlayerMoved;
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnPlayerMoved += OnPlayerMoved;
+        }
     }
-
     private void OnDisable()
     {
-        GameEvents.Instance.OnPlayerMoved -= OnPlayerMoved;
+        if (GameEvents.Instance != null)
+        {
+            GameEvents.Instance.OnPlayerMoved -= OnPlayerMoved;
+        }
     }
 
     private void OnPlayerMoved(Transform player)
