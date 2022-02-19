@@ -13,7 +13,6 @@ public class Coin : MonoBehaviour
             GameEvents.Instance.OnCoinTriggered += OnTriggered;
         }
     }
-
     private void OnDisable()
     {
         if (GameEvents.Instance != null)
@@ -26,14 +25,16 @@ public class Coin : MonoBehaviour
     {
         if (collided == gameObject)
         {
-            SelectNewPosition();
+            gameObject.SetActive(false);
+            CoinRegulator.Instance.RegulatePosition(this);
             GameEvents.Instance.CoinCollected(_prize);
         }
     }
 
-    public void SelectNewPosition()
+    public void SelectNewPosition(Vector3 newPos)
     {
-        transform.position = CoinRegulator.Instance.SelectNewPositionForCoins(transform.position.y);
+        gameObject.SetActive(true);
+        transform.position = newPos;
         GameEvents.Instance.DynamicObjectPositioned(gameObject, transform.position);
     }
 }

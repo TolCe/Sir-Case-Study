@@ -38,28 +38,32 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
+#if UNITY_ANDROID
         if (_canControl)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.touchCount > 0)
             {
-                _rb.velocity = Vector3.zero;
-                _rb.angularVelocity = Vector3.zero;
-                _initMousePos = Input.mousePosition;
-            }
-            else if (Input.GetMouseButton(0))
-            {
-                Vector3 direction = Input.mousePosition - _initMousePos;
-                _rb.velocity = _sensitivity * (Mathf.Clamp(direction.x / Screen.width, -_maxSpeed, _maxSpeed) * Vector3.right + Mathf.Clamp(direction.y / Screen.height, -_maxSpeed, _maxSpeed) * Vector3.forward);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(new Vector3(direction.x / Screen.width, 0, direction.y / Screen.height)), _rotateSpeed * Time.fixedDeltaTime);
-                GameEvents.Instance.PlayerMoved(transform);
-            }
-            else
-            {
-                _initMousePos = Input.mousePosition;
+                Touch touch = Input.GetTouch(0);
+
+                if (touch.phase == TouchPhase.Began)
+                {
+                    _rb.velocity = Vector3.zero;
+                    _rb.angularVelocity = Vector3.zero;
+                    _initMousePos = touch.position;
+                }
+                else if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+                {
+                    Vector3 touchPosition = touch.position;
+                    Vector3 direction = touchPosition - _initMousePos;
+                    _rb.velocity = _sensitivity * (Mathf.Clamp(direction.x / Screen.width, -_maxSpeed, _maxSpeed) * Vector3.right + Mathf.Clamp(direction.y / Screen.height, -_maxSpeed, _maxSpeed) * Vector3.forward);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(new Vector3(direction.x / Screen.width, 0, direction.y / Screen.height)), _rotateSpeed * Time.fixedDeltaTime);
+                    GameEvents.Instance.PlayerMoved(transform);
+                }
             }
         }
+#endif
 
         GameEvents.Instance.DynamicObjectPositioned(gameObject, transform.position);
     }

@@ -49,10 +49,5 @@ public class PositionRegulator : MonoBehaviour
         {
             DynamicPositions.Add(obj, position);
         }
-
-        foreach (var item in DynamicPositions.Keys)
-        {
-            Debug.Log(item);
-        }
     }
 }
