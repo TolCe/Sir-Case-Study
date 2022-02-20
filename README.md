@@ -1,5 +1,5 @@
-# Sir-Case-Study
-Case study of Sir Game Studios
+# Sir Case Study
+Case project of Sir Game Studios
 
 # Project Display Image
 
